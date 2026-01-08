@@ -6,6 +6,7 @@
 <title>Happy Birthday Palak 🎂</title>
 
 <style>
+/* MOBILE ONLY */
 @media (min-width: 768px) {
   body { display: none; }
 }
@@ -18,6 +19,47 @@ body {
   overflow-x: hidden;
 }
 
+/* BACKGROUND EFFECTS */
+.effects {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* BALLOONS */
+.balloon {
+  position: absolute;
+  bottom: -120px;
+  opacity: 0.9;
+  animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-130vh);
+    opacity: 0;
+  }
+}
+
+/* CONFETTI */
+.confetti {
+  position: absolute;
+  top: -20px;
+  width: 8px;
+  height: 14px;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(120vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* CONTENT */
 section {
   min-height: 100vh;
   padding: 40px 20px;
@@ -26,6 +68,8 @@ section {
   justify-content: center;
   align-items: center;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 h1 { font-size: 2.4rem; }
@@ -62,77 +106,42 @@ button {
   margin-top: 20px;
 }
 
-.music-btn, .celebrate-btn {
+/* MUSIC BUTTON */
+.music-btn {
   position: fixed;
+  top: 15px;
   right: 15px;
-  border-radius: 50%;
   width: 46px;
   height: 46px;
-  font-size: 18px;
+  border-radius: 50%;
   border: none;
-  cursor: pointer;
-}
-
-.music-btn {
-  top: 15px;
   background: #fff;
   color: #ff5e8e;
-}
-
-.celebrate-btn {
-  bottom: 20px;
-  background: #ff5e8e;
-  color: #fff;
-}
-
-/* Balloons */
-.balloon {
-  position: fixed;
-  bottom: -100px;
-  font-size: 2rem;
-  animation: floatUp 6s linear forwards;
-}
-
-@keyframes floatUp {
-  to {
-    transform: translateY(-120vh);
-    opacity: 0;
-  }
-}
-
-/* Confetti */
-.confetti {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: red;
-  top: -10px;
-  animation: fall 3s linear forwards;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(110vh) rotate(360deg);
-    opacity: 0;
-  }
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 5;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Music -->
-<audio id="bgMusic" loop autoplay>
+<!-- BACKGROUND EFFECTS -->
+<div class="effects" id="effects"></div>
+
+<!-- MUSIC -->
+<audio id="bgMusic" autoplay loop>
   <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
 </audio>
 <button class="music-btn" onclick="toggleMusic()">🎵</button>
-<button class="celebrate-btn" onclick="celebrate()">🎉</button>
 
+<!-- SECTION 1 -->
 <section>
   <h1>Happy Birthday Palak 🎂</h1>
   <p>Wishing you a day full of smiles & happiness ✨</p>
 </section>
 
+<!-- SECTION 2 -->
 <section>
   <div class="message">
     Palak, you are someone who spreads positivity wherever you go 🌼<br><br>
@@ -142,18 +151,22 @@ button {
   </div>
 </section>
 
+<!-- SECTION 3 -->
 <section>
   <h2>🎉 It’s Your Special Day, Palak! 🎉</h2>
 </section>
 
+<!-- SECTION 4 -->
 <section>
   <div class="card" onclick="openCard()">🎁 Tap to open</div>
   <div class="card card-text" id="cardText">
-    May this year bring you laughter,
-    peace and endless smiles 💖
+    May this year bring you<br>
+    laughter, peace and<br>
+    endless smiles 💖
   </div>
 </section>
 
+<!-- SECTION 5 -->
 <section>
   <h2>Stay happy. Stay amazing ✨</h2>
   <button onclick="alert('🎂 Happy Birthday Palak! 🎉')">
@@ -162,36 +175,43 @@ button {
 </section>
 
 <script>
-function toggleMusic() {
-  const music = document.getElementById('bgMusic');
-  music.paused ? music.play() : music.pause();
-}
+const effects = document.getElementById("effects");
 
+/* AUTO BALLOONS */
+setInterval(() => {
+  const b = document.createElement("div");
+  b.className = "balloon";
+  b.innerText = "🎈";
+  b.style.left = Math.random() * 100 + "vw";
+  b.style.fontSize = 20 + Math.random() * 30 + "px";
+  b.style.animationDuration = 6 + Math.random() * 6 + "s";
+  effects.appendChild(b);
+  setTimeout(() => b.remove(), 12000);
+}, 600);
+
+/* AUTO CONFETTI */
+setInterval(() => {
+  for (let i = 0; i < 4; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = `hsl(${Math.random()*360},100%,60%)`;
+    c.style.animationDuration = 3 + Math.random() * 3 + "s";
+    effects.appendChild(c);
+    setTimeout(() => c.remove(), 6000);
+  }
+}, 300);
+
+/* CARD */
 function openCard() {
   document.querySelector('.card').style.display = 'none';
   document.getElementById('cardText').style.display = 'flex';
 }
 
-function celebrate() {
-  // Balloons
-  for (let i = 0; i < 8; i++) {
-    const b = document.createElement('div');
-    b.className = 'balloon';
-    b.style.left = Math.random() * 100 + 'vw';
-    b.innerText = '🎈';
-    document.body.appendChild(b);
-    setTimeout(() => b.remove(), 6000);
-  }
-
-  // Confetti
-  for (let i = 0; i < 40; i++) {
-    const c = document.createElement('div');
-    c.className = 'confetti';
-    c.style.left = Math.random() * 100 + 'vw';
-    c.style.background = `hsl(${Math.random()*360},100%,60%)`;
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), 3000);
-  }
+/* MUSIC */
+function toggleMusic() {
+  const m = document.getElementById("bgMusic");
+  m.paused ? m.play() : m.pause();
 }
 </script>
 
